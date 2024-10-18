@@ -29,7 +29,7 @@ async def charity_projects_get_all(
         get_async_session)):
     charity_projects = (
         await charity_project_crud.get_multi(
-        session))
+            session))
     return charity_projects
 
 
@@ -65,13 +65,13 @@ async def charity_project_patch(
         get_async_session)):
     charity_project = (
         await get_charity_project_by_id(
-        project_id, session))
+            project_id, session))
     await verifi_charity_project_before_update(
         update_data, charity_project, session
     )
     updated_charity_project = (
         await charity_project_crud.update(
-        charity_project, update_data, session))
+            charity_project, update_data, session))
     await make_payment(session)
     await session.refresh(updated_charity_project)
     return updated_charity_project
@@ -88,11 +88,11 @@ async def charity_project_delete(
         get_async_session)):
     charity_project = (
         await get_charity_project_by_id(
-        project_id, session))
+            project_id, session))
     await verifi_for_zero_invested_amount(
         charity_project
     )
     charity_project_deleted = (
         await charity_project_crud.remove(
-        charity_project, session))
+            charity_project, session))
     return charity_project_deleted

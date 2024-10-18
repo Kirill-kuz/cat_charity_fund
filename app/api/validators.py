@@ -44,7 +44,6 @@ async def verifi_charity_project_before_update(
         )
 
 
-
 async def get_charity_project_by_id(
     charity_project_id: int, session: AsyncSession
 ) -> CharityProject:

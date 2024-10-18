@@ -5,8 +5,7 @@ from pydantic import (
     BaseModel,
     Extra,
     Field,
-    PositiveInt,
-    validator)
+    PositiveInt)
 
 
 class CharityProjectBase(BaseModel):

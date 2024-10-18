@@ -17,7 +17,7 @@ class CreateAndCloseDateMixin:
         DateTime,
         default=None,
         nullable=True)
-    
+
 
 @declarative_mixin
 class InvestedMixin(CreateAndCloseDateMixin):
@@ -40,7 +40,6 @@ class InvestedMixin(CreateAndCloseDateMixin):
             name='verifi_pos_invested_amount'
         ),
     )
-    
 
     def close(self):
         self.invested_amount = self.full_amount
