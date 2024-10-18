@@ -19,12 +19,11 @@ class Settings(BaseSettings):
     class Config:
         env_file = '.env'
 
-logging.basicConfig(handlers=[logging.StreamHandler(sys.stdout)],
-    format=(
-        '%(asctime)s - %(name)s - %(funcName)s - %(levelname)s - %(message)s'
-    ),
-    level=logging.INFO
-)
+logging.basicConfig(
+    handlers=[logging.StreamHandler(
+        sys.stdout)], format=(
+            '%(asctime)s - %(name)s - %(funcName)s - %(levelname)s - %(message)s'
+            ), level=logging.INFO)
 
 settings = Settings()
 logger = logging.getLogger(__name__)
