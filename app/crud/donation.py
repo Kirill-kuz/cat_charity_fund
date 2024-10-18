@@ -23,4 +23,5 @@ class CRUDDonation(CRUDBase[Donation, DonationCreate, DonationUpdate]):
         donations_db = donations_db.scalars().all()
         return donations_db
 
+
 donation_crud = CRUDDonation(Donation)

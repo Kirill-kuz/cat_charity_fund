@@ -7,8 +7,8 @@ from app.models import CharityProject
 from app.schemas import CharityProjectCreate, CharityProjectUpdate
 
 
-class CRUDCharityProject(
-    CRUDBase[CharityProject, CharityProjectCreate, CharityProjectUpdate]):
+class CRUDCharityProject(CRUDBase[CharityProject, CharityProjectCreate,
+                                  CharityProjectUpdate]):
     async def get_by_name(
         self, name: str, session: AsyncSession
     ) -> CharityProject:
@@ -19,5 +19,6 @@ class CRUDCharityProject(
         )
         charity_project = charity_project.scalars().first()
         return charity_project
+
 
 charity_project_crud = CRUDCharityProject(CharityProject)

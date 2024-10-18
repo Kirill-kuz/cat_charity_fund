@@ -8,8 +8,8 @@ from pydantic import BaseSettings, EmailStr
 class Settings(BaseSettings):
     app_title: str = 'Приложение для Благотворительного ' \
                      'фонда поддержки котиков QRKot.'
-    app_description: str = 'Приложение фонда для сбора пожертвований кошкам — ' \
-                           'на любые цели, связанные с поддержкой ' \
+    app_description: str = 'Приложение фонда для сбора пожертвований' \
+                           ' кошкам — на любые цели, связанные с поддержкой ' \
                            'кошачьей популяции'
     database_url: str = 'sqlite+aiosqlite:///./fastapi.db'
     secret: str = 'secretkey'
@@ -29,4 +29,3 @@ logging.basicConfig(
 
 settings = Settings()
 logger = logging.getLogger(__name__)
-
