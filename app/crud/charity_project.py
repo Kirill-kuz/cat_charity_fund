@@ -8,7 +8,7 @@ from app.schemas import CharityProjectCreate, CharityProjectUpdate
 
 
 class CRUDCharityProject(
-    CRUDBase[CharityProject,CharityProjectCreate,CharityProjectUpdate]):
+    CRUDBase[CharityProject, CharityProjectCreate, CharityProjectUpdate]):
     async def get_by_name(
         self, name: str, session: AsyncSession
     ) -> CharityProject:

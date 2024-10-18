@@ -9,10 +9,7 @@ from app.models import Donation, User
 from app.schemas import DonationCreate, DonationUpdate
 
 
-class CRUDDonation(CRUDBase[
-    Donation,
-    DonationCreate,
-    DonationUpdate]):
+class CRUDDonation(CRUDBase[Donation, DonationCreate, DonationUpdate]):
     async def get_user_donations(
         self,
         user: User,
