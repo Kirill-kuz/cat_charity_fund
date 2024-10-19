@@ -33,8 +33,6 @@ source venv/scripts/activate
 ```
 pip install -r requirements.txt
 ```
-
-
 ### 2. Создайте файл .env, в корне проекта выполните команду:
 ```
 mv .env.example .env
