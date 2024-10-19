@@ -9,12 +9,12 @@ from app.api.validators import (
     verifi_name_allready_exists,
     get_charity_project_by_id)
 from app.core import current_superuser, get_async_session
-from app.crud import charity_project_crud
+from app.crud import charity_project_crud, donation_crud
 from app.schemas import (
     CharityProjectCreate,
     CharityProjectDB,
     CharityProjectUpdate)
-from app.services import make_payment
+from app.services.payment import make_payment, investment_procces
 
 router = APIRouter()
 
@@ -45,10 +45,15 @@ async def charity_project_create(
         get_async_session)):
     await verifi_name_allready_exists(
         charity_project.name, session)
-    new_charity_project = (
-        await charity_project_crud.create(
-            charity_project, session))
-    await make_payment(session)
+    new_charity_project = await charity_project_crud.create(
+        charity_project, session, commit=False)
+    session.add_all(
+        investment_procces(
+            target=new_charity_project,
+            sources=await donation_crud.get_not_invested(session)
+        )
+    )
+    await session.commit()
     await session.refresh(new_charity_project)
     return new_charity_project
 
@@ -89,7 +94,7 @@ async def charity_project_delete(
     charity_project = (
         await get_charity_project_by_id(
             project_id, session))
-    await verifi_for_zero_invested_amount(
+    verifi_for_zero_invested_amount(
         charity_project
     )
     charity_project_deleted = (

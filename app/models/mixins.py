@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from app.core import Base
 from sqlalchemy import (
     Boolean,
     CheckConstraint,
@@ -10,17 +10,14 @@ from sqlalchemy.orm import declarative_mixin
 
 
 @declarative_mixin
-class CreateAndCloseDateMixin:
+class InvestedMixin(Base):
+    __abstract__ = True
     create_date = Column(
         DateTime, default=datetime.now)
     close_date = Column(
         DateTime,
         default=None,
         nullable=True)
-
-
-@declarative_mixin
-class InvestedMixin(CreateAndCloseDateMixin):
     full_amount = Column(Integer, nullable=False,)
     fully_invested = Column(
         Boolean,
@@ -36,9 +33,18 @@ class InvestedMixin(CreateAndCloseDateMixin):
             name='verifi_full_amount_positive'
         ),
         CheckConstraint(
-            'invested_amount >= 0',
+            'full_amount >= invested_amount >= 0',
             name='verifi_pos_invested_amount'
         ),
+    )
+    def __repr__(self):
+        return (
+            f"<InvestedMixin("
+            f"full_amount={self.full_amount}, "
+            f"invested_amount={self.invested_amount}, "
+            f"fully_invested={self.fully_invested}, "
+            f"create_date={self.create_date}, "
+            f"close_date={self.close_date})>"
     )
 
     def close(self):

@@ -19,6 +19,10 @@
 ```
 git clone git@github.com:Kirill-kuz/cat_charity_fund.git
 ```
+Перейдите в папку.
+```
+cd cat_charity_fund
+```
 В корневой папке создайте виртуальное окружение и установите зависимости.
 ```
 python -m venv venv
@@ -37,13 +41,9 @@ mv .env.example .env
 ```
 ### 3. Примените миграции
 ```
-alembic revision --autogenerate -m "migration name"
-```
-```
 alembic upgrade head
 ```
 ### 4. Запуск проекта
-
 ```
 uvicorn main:app
 ```
@@ -82,6 +82,7 @@ curl -X 'POST' \
 ```
 Далее используйте этот токен при запросах к сервису.
 
-
+#### *[/swagger](http://127.0.0.1:8000/swagger/)*
+#### *[/redoc](http://127.0.0.1:8000/redoc)*
 ### Автор
-Кирилл Кузнецов
+Кирилл Кузнецов https://github.com/Kirill-kuz

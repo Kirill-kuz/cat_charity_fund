@@ -1,8 +1,8 @@
-"""migrate
+"""migrate1
 
-Revision ID: 7b754e0e0ef2
+Revision ID: 88113f92e46e
 Revises: 
-Create Date: 2024-10-18 02:45:47.649381
+Create Date: 2024-10-19 22:19:28.649267
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '7b754e0e0ef2'
+revision = '88113f92e46e'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -28,7 +28,7 @@ def upgrade():
     sa.Column('name', sa.String(length=100), nullable=False),
     sa.Column('description', sa.Text(), nullable=False),
     sa.CheckConstraint('full_amount > 0', name='verifi_full_amount_positive'),
-    sa.CheckConstraint('invested_amount >= 0', name='verifi_pos_invested_amount'),
+    sa.CheckConstraint('full_amount >= invested_amount >= 0', name='verifi_pos_invested_amount'),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
@@ -53,7 +53,7 @@ def upgrade():
     sa.Column('comment', sa.Text(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.CheckConstraint('full_amount > 0', name='verifi_full_amount_positive'),
-    sa.CheckConstraint('invested_amount >= 0', name='verifi_pos_invested_amount'),
+    sa.CheckConstraint('full_amount >= invested_amount >= 0', name='verifi_pos_invested_amount'),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], name='fk_donation_user_id_user'),
     sa.PrimaryKeyConstraint('id')
     )

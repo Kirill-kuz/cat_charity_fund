@@ -1,4 +1,5 @@
 from typing import List
+from datetime import datetime
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -6,60 +7,42 @@ from app.crud import charity_project_crud, donation_crud
 from app.models import CharityProject, Donation
 
 
-async def get_open_charity_projects(
-    session: AsyncSession
-) -> List[CharityProject]:
-    open_charity_projects = (
-        await charity_project_crud.get_opens(session))
-    return open_charity_projects
-
-
-async def get_open_donations(
-    session: AsyncSession
+def investment_procces(
+    target: CharityProject, sources: List[Donation]
 ) -> List[Donation]:
-    donations = await donation_crud.get_opens(session)
-    return donations
+    target.invested_amount = (
+        0 if target.invested_amount is None else target.invested_amount
+    )
+    new_sources = []
+    for source in sources:
+        if target.fully_invested:
+            break
+        donation = min(
+            source.full_amount - source.invested_amount,
+            target.full_amount - target.invested_amount,
+            source.full_amount
+        )
+        for obj in (target, source):
+            obj.invested_amount += donation
+            if obj.full_amount == obj.invested_amount:
+                obj.fully_invested = True
+                obj.close_date = datetime.utcnow()
+        new_sources.append(source)
+    return new_sources
 
 
 async def make_payment(session: AsyncSession):
-    charity_projects = await get_open_charity_projects(session)
-    donations = await get_open_donations(session)
+    charity_projects = await charity_project_crud.get_opens(session)
+    donations = await donation_crud.get_opens(session)
 
     if not charity_projects or not donations:
         return
 
-    updated_entities = []
+    updated_donations = []
+    for charity_project in charity_projects:
+        updated_donations.extend(
+            investment_procces(charity_project, donations))
 
-    for donation in donations:
-        free_money = donation.full_amount - donation.invested_amount
-
-        for index, charity in enumerate(charity_projects):
-            if charity.fully_invested:
-                continue
-
-            need_money = charity.full_amount - charity.invested_amount
-
-            if free_money > need_money:
-                donation.invested_amount += need_money
-                free_money -= need_money
-                charity.close()
-                updated_entities.append(charity)
-
-            elif free_money < need_money:
-                charity.invested_amount += free_money
-                donation.close()
-                updated_entities.append(donation)
-                updated_entities.append(charity)
-                del charity_projects[index]
-                break
-
-            else:
-                charity.close()
-                donation.close()
-                updated_entities.extend([charity, donation])
-                del charity_projects[index]
-                break
-
-    if updated_entities:
-        session.add_all(updated_entities)
+    if updated_donations:
+        session.add_all(updated_donations)
         await session.commit()

@@ -35,8 +35,8 @@ async def verifi_charity_project_before_update(
         await verifi_name_allready_exists(
             update_data.name, session
         )
-    if update_data.full_amount and \
-       update_data.full_amount < charity_project.invested_amount:
+    if (update_data.full_amount and
+        update_data.full_amount < charity_project.invested_amount):
         raise HTTPException(
             status_code=HTTPStatus.BAD_REQUEST.value,
             detail=f'В {charity_project.name} уже '
@@ -58,7 +58,7 @@ async def get_charity_project_by_id(
     return charity_project_db
 
 
-async def verifi_for_zero_invested_amount(
+def verifi_for_zero_invested_amount(
     charity_project: CharityProject
 ) -> None:
     if charity_project.invested_amount:

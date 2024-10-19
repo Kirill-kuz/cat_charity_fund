@@ -1,7 +1,6 @@
 from typing import List
 
 from sqlalchemy import select
-from sqlalchemy.engine.result import Result
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.crud import CRUDBase
@@ -15,13 +14,11 @@ class CRUDDonation(CRUDBase[Donation, DonationCreate, DonationUpdate]):
         user: User,
         session: AsyncSession
     ) -> List[Donation]:
-        donations_db: Result = await session.execute(
+        return (await session.execute(
             select(self.model).where(
                 self.model.user_id == user.id
             )
-        )
-        donations_db = donations_db.scalars().all()
-        return donations_db
+        )).scalars().all()
 
 
 donation_crud = CRUDDonation(Donation)

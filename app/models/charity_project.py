@@ -12,3 +12,11 @@ class CharityProject(InvestedMixin, Base):
     description = Column(
         Text,
         nullable=False)
+    
+    def __repr__(self):
+        return (
+            f"<CharityProject("
+            f"name={self.name}, "
+            f"description={self.description}, "
+            f"{super().__repr__()})>"
+        )
