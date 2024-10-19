@@ -15,7 +15,7 @@ class CRUDCharityProject(CRUDBase[CharityProject, CharityProjectCreate,
             select(self.model).where(
                 self.model.name == name,
             )
-        )).scalars().first() 
+        )).scalars().first()
 
 
 charity_project_crud = CRUDCharityProject(CharityProject)

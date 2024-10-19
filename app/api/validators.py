@@ -36,7 +36,7 @@ async def verifi_charity_project_before_update(
             update_data.name, session
         )
     if (update_data.full_amount and
-        update_data.full_amount < charity_project.invested_amount):
+            update_data.full_amount < charity_project.invested_amount):
         raise HTTPException(
             status_code=HTTPStatus.BAD_REQUEST.value,
             detail=f'В {charity_project.name} уже '
