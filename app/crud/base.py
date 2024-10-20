@@ -105,9 +105,8 @@ class CRUDBase(
         self,
         session: AsyncSession
     ) -> List[ModelType]:
-        all_not_invested = await session.scalars(
+        return (await session.scalars(
             select(self.model).where(
                 self.model.fully_invested == 0
             )
-        )
-        return all_not_invested.all()
+        )).all()

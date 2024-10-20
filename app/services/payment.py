@@ -1,26 +1,23 @@
 from typing import List
 from datetime import datetime
 
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from app.crud import charity_project_crud, donation_crud
-from app.models import CharityProject, Donation
+from app.core import Base
 
 
 def investment_procces(
-    target: CharityProject, sources: List[Donation]
-) -> List[Donation]:
-    target.invested_amount = (
-        0 if target.invested_amount is None else target.invested_amount
-    )
+    target: Base, sources: List[Base]
+) -> List[Base]:
     new_sources = []
     for source in sources:
         if target.fully_invested:
             break
+        if source.invested_amount is None:
+               source.invested_amount = 0
+        if target.invested_amount is None:
+               target.invested_amount = 0
         donation = min(
             source.full_amount - source.invested_amount,
             target.full_amount - target.invested_amount,
-            source.full_amount
         )
         for obj in (target, source):
             obj.invested_amount += donation
@@ -29,20 +26,3 @@ def investment_procces(
                 obj.close_date = datetime.utcnow()
         new_sources.append(source)
     return new_sources
-
-
-async def make_payment(session: AsyncSession):
-    charity_projects = await charity_project_crud.get_opens(session)
-    donations = await donation_crud.get_opens(session)
-
-    if not charity_projects or not donations:
-        return
-
-    updated_donations = []
-    for charity_project in charity_projects:
-        updated_donations.extend(
-            investment_procces(charity_project, donations))
-
-    if updated_donations:
-        session.add_all(updated_donations)
-        await session.commit()

@@ -1,10 +1,10 @@
 from sqlalchemy import Column, ForeignKey, Integer, Text
 
 from app.core import Base
-from .mixins import InvestedMixin
+from .mixins import Invested
 
 
-class Donation(InvestedMixin, Base):
+class Donation(Invested, Base):
     comment = Column(Text, nullable=True)
     user_id = Column(Integer,
                      ForeignKey(
@@ -15,6 +15,5 @@ class Donation(InvestedMixin, Base):
     def __repr__(self):
         return (
             f"<Donation("
-            f"comment={self.comment}, "
             f"user_id={self.user_id}, "
             f"{super().__repr__()})>")

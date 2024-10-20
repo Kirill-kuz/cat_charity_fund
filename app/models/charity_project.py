@@ -1,10 +1,10 @@
 from sqlalchemy import Column, String, Text
 
 from app.core import Base
-from .mixins import InvestedMixin
+from .mixins import Invested
 
 
-class CharityProject(InvestedMixin, Base):
+class CharityProject(Invested, Base):
     name = Column(String(
         length=100),
         unique=True,
@@ -15,7 +15,6 @@ class CharityProject(InvestedMixin, Base):
 
     def __repr__(self):
         return (
-            f"<CharityProject("
             f"name={self.name}, "
             f"description={self.description}, "
             f"{super().__repr__()})>")

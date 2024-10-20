@@ -7,10 +7,11 @@ from app.core import (
     current_superuser,
     current_user,
     get_async_session)
-from app.crud import donation_crud
+from app.crud import charity_project_crud, donation_crud
 from app.models import User
 from app.schemas import DonationCreate, DonationDB
-from app.services import make_payment
+from app.services.payment import investment_procces
+
 
 router = APIRouter()
 
@@ -41,13 +42,19 @@ async def get_all_donations(
 async def create_donation(
     donation: DonationCreate,
     user: User = Depends(current_user),
-    session: AsyncSession = Depends(
-        get_async_session)):
-    donation_db = await donation_crud.create(
-        donation, session, user)
-    await make_payment(session)
-    await session.refresh(donation_db)
-    return donation_db
+    session: AsyncSession = Depends(get_async_session)
+):
+    new_donation = await donation_crud.create(
+        donation, session, user, False)
+    session.add_all(
+        investment_procces(
+            target=new_donation,
+            sources=await charity_project_crud.get_opens(session)
+        )
+    )
+    await session.commit()
+    await session.refresh(new_donation)
+    return new_donation
 
 
 @router.get(

@@ -14,7 +14,8 @@ from app.schemas import (
     CharityProjectCreate,
     CharityProjectDB,
     CharityProjectUpdate)
-from app.services.payment import make_payment, investment_procces
+from app.services.payment import investment_procces
+
 
 router = APIRouter()
 
@@ -77,7 +78,12 @@ async def charity_project_patch(
     updated_charity_project = (
         await charity_project_crud.update(
             charity_project, update_data, session))
-    await make_payment(session)
+    session.add_all(
+        investment_procces(
+            target=updated_charity_project,
+            sources=await donation_crud.get_not_invested(session)
+        )
+    )
     await session.refresh(updated_charity_project)
     return updated_charity_project
 

@@ -83,4 +83,4 @@ curl -X 'POST' \
 #### *[/swagger](http://127.0.0.1:8000/swagger/)*
 #### *[/redoc](http://127.0.0.1:8000/redoc)*
 ### Автор
-Кирилл Кузнецов https://github.com/Kirill-kuz
+[Кирилл Кузнецов](https://github.com/Kirill-kuz)

@@ -6,11 +6,9 @@ from sqlalchemy import (
     Column,
     DateTime,
     Integer)
-from sqlalchemy.orm import declarative_mixin
 
 
-@declarative_mixin
-class InvestedMixin(Base):
+class Invested(Base):
     __abstract__ = True
     create_date = Column(
         DateTime, default=datetime.now)
@@ -40,14 +38,9 @@ class InvestedMixin(Base):
 
     def __repr__(self):
         return (
-            f"<InvestedMixin("
-            f"full_amount={self.full_amount}, "
+            f"<Donation("
+            f"{self.full_amount}, "
             f"invested_amount={self.invested_amount}, "
             f"fully_invested={self.fully_invested}, "
             f"create_date={self.create_date}, "
             f"close_date={self.close_date})>")
-
-    def close(self):
-        self.invested_amount = self.full_amount
-        self.fully_invested = True
-        self.close_date = datetime.now()
