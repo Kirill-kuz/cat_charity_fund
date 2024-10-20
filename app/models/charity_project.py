@@ -1,7 +1,7 @@
 from sqlalchemy import Column, String, Text
 
 from app.core import Base
-from .mixins import Invested
+from .base import Invested
 
 
 class CharityProject(Invested, Base):

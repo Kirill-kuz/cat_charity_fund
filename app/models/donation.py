@@ -1,7 +1,7 @@
 from sqlalchemy import Column, ForeignKey, Integer, Text
 
 from app.core import Base
-from .mixins import Invested
+from .base import Invested
 
 
 class Donation(Invested, Base):
