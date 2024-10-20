@@ -44,7 +44,7 @@ class Invested(Base):
     def __repr__(self):
         return (
             f"<Investment("
-            f"{self.full_amount=}, " 
+            f"{self.full_amount=}, "
             f"{self.invested_amount=}, "
             f"{self.fully_invested=}, "
             f"create_date={self.create_date}, "
