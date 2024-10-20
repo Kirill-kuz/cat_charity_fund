@@ -12,9 +12,9 @@ def investment_procces(
         if target.fully_invested:
             break
         if source.invested_amount is None:
-               source.invested_amount = 0
+            source.invested_amount = 0
         if target.invested_amount is None:
-               target.invested_amount = 0
+            target.invested_amount = 0
         donation = min(
             source.full_amount - source.invested_amount,
             target.full_amount - target.invested_amount,
